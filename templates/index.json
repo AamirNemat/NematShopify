@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-banner",
+      "settings": {
+        "heading": "Welcome to our store",
+        "subheading": "Discover our latest collection"
+      }
+    },
+    "featured-collection": {
+      "type": "featured-collection",
+      "settings": {}
+    },
+    "rich-text": {
+      "type": "rich-text",
+      "settings": {
+        "heading": "About Us",
+        "text": "<p>Share your brand story with customers.</p>"
+      }
+    }
+  },
+  "order": ["hero", "featured-collection", "rich-text"]
+}

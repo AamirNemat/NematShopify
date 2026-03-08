@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ 'gift_cards.issued.title' | t }} — {{ shop.name }}</title>
+  {{ content_for_header }}
+  {{ 'base.css' | asset_url | stylesheet_tag }}
+</head>
+<body class="gift-card">
+  <header class="gift-card__header" role="banner">
+    <h1 class="gift-card__shop-name">{{ shop.name }}</h1>
+    <h2 class="gift-card__title">{{ 'gift_cards.issued.subtext' | t }}</h2>
+    {% if gift_card.initial_value != gift_card.balance %}
+      <p class="gift-card__balance">{{ 'gift_cards.issued.remaining_html' | t: balance: gift_card.balance | money }}</p>
+    {% endif %}
+  </header>
+
+  <main class="gift-card__main">
+    <div class="gift-card__image-wrapper">
+      <img src="{{ 'gift-card/card.jpg' | shopify_asset_url }}" alt="" class="gift-card__image" height="400" width="600" loading="lazy">
+    </div>
+
+    <div class="gift-card__price">
+      <p>{{ gift_card.initial_value | money }}</p>
+      {% if gift_card.enabled == false %}
+        <span class="gift-card__disabled">{{ 'gift_cards.issued.disabled' | t }}</span>
+      {% endif %}
+    </div>
+
+    <div class="gift-card__code">
+      <input
+        type="text"
+        class="gift-card__number"
+        value="{{ gift_card.code | format_code }}"
+        aria-label="{{ 'gift_cards.issued.gift_card_code' | t }}"
+        readonly
+      >
+    </div>
+
+    {% if gift_card.pass_url %}
+      <a href="{{ gift_card.pass_url }}" class="gift-card__apple-wallet">
+        <img src="{{ 'gift-card/add-to-apple-wallet.svg' | shopify_asset_url }}" alt="{{ 'gift_cards.issued.add_to_apple_wallet' | t }}" width="120" height="40" loading="lazy">
+      </a>
+    {% endif %}
+
+    <div class="gift-card__qr-code" data-identifier="{{ gift_card.qr_identifier }}"></div>
+
+    {% if gift_card.expired and gift_card.enabled %}
+      <p class="gift-card__expired">{{ 'gift_cards.issued.expired' | t }}</p>
+    {% endif %}
+
+    {% unless gift_card.expired %}
+      {% if gift_card.expires_on %}
+        <p class="gift-card__expiry">{{ 'gift_cards.issued.expiration_date' | t: expires_on: gift_card.expires_on | date: "%B %e, %Y" }}</p>
+      {% endif %}
+    {% endunless %}
+
+    <a href="{{ shop.url }}" class="gift-card__shop-link" target="_blank" rel="noopener">{{ 'gift_cards.issued.shop_link' | t }}</a>
+  </main>
+</body>
+</html>
